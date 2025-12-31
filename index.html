@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Happy New Year 🎆</title>
+<style>
+  /* Body & Gradient Background */
+  body {
+    margin: 0;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(135deg, #87ceeb, #a0d8ef, #ff9a9e);
+    background-size: 400% 400%;
+    animation: gradientShift 20s ease infinite;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    text-align: center;
+    overflow: hidden;
+    position: relative;
+  }
+
+  @keyframes gradientShift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+
+  /* Glowing Button */
+  #tapButton {
+    padding: 20px 40px;
+    font-size: 20px;
+    border: none;
+    border-radius: 15px;
+    background: linear-gradient(45deg, #ff4d6d, #ff7a95);
+    color: white;
+    cursor: pointer;
+    box-shadow: 0 0 20px rgba(255,77,109,0.7), 0 0 40px rgba(255,122,149,0.5);
+    transition: all 0.3s ease;
+    z-index: 3;
+    position: relative;
+    overflow: hidden;
+  }
+  #tapButton:active { transform: scale(0.95); }
+
+  #tapButton::after {
+    content: '';
+    position: absolute;
+    top: -10px; left: -10px;
+    width: calc(100% + 20px);
+    height: calc(100% + 20px);
+    border-radius: 15px;
+    background: radial-gradient(circle, rgba(255,255,255,0.3), transparent);
+    opacity: 0.6;
+    animation: pulse 2s infinite;
+    z-index: -1;
+  }
+
+  @keyframes pulse {
+    0%,100% { transform: scale(1); opacity: 0.6; }
+    50% { transform: scale(1.2); opacity: 0.3; }
+  }
+
+  /* Card */
+  #card {
+    background: rgba(255,255,255,0.9);
+    padding: 30px;
+    border-radius: 20px;
+    max-width: 360px;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+    transform: scale(0);
+    opacity: 0;
+    transition: all 0.6s ease;
+    position: relative;
+    z-index: 2;
+  }
+  #card.show {
+    transform: scale(1);
+    opacity: 1;
+  }
+
+  h1 { color: #ff4d6d; margin-bottom: 10px; }
+  p { color: #444; line-height: 1.6; }
+
+  /* Confetti */
+  .confetti {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    background-color: #fff;
+    top: -10px;
+    opacity: 0.8;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  /* Falling stars */
+  .star {
+    position: absolute;
+    width: 3px;
+    height: 3px;
+    background: white;
+    border-radius: 50%;
+    opacity: 0.8;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* Blooming flowers */
+  .flower {
+    position: absolute;
+    bottom: 0;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    opacity: 0.8;
+    pointer-events: none;
+    transform: scale(0);
+    animation: bloom 2s forwards;
+  }
+  @keyframes bloom {
+    0% { transform: scale(0); opacity: 0; }
+    50% { transform: scale(1.2); opacity: 1; }
+    100% { transform: scale(1); opacity: 0.9; }
+  }
+
+  /* Floating particles behind the card */
+  .particle {
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    background-color: rgba(255,255,255,0.6);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 1;
+    opacity: 0;
+  }
+</style>
+</head>
+<body>
+
+<button id="tapButton">Tap to Celebrate 🎉</button>
+
+<div id="card">
+  <h1>Happy New Year 🎆</h1>
+  <p>Hoi 💮</p>
+  <p>Happy new year Yasu</p>
+  <p id="message"></p>
+</div>
+
+<audio id="music" loop>
+  <source src="co2.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+  const button = document.getElementById('tapButton');
+  const card = document.getElementById('card');
+  const music = document.getElementById('music');
+  const messageEl = document.getElementById('message');
+
+  const messageText = `I didn't wanted this year to be ended like this
+But man I am such a dumbass
+But I pray 2026 and the rest all years be the best ones for you and your family.
+May you always be happy everywhere 💝
+And achieve your dreams 🫡
+Barakallahu Feek ✨
+Buii`;
+
+  // Typing message effect
+  function typeMessage(text, el, delay=50) {
+    let i = 0;
+    function type() {
+      if(i < text.length) {
+        el.innerHTML += text[i] === '\n' ? '<br>' : text[i];
+        i++;
+        setTimeout(type, delay);
+      }
+    }
+    type();
+  }
+
+  // Confetti
+  function createConfetti(count=30) {
+    for(let i=0;i<count;i++) {
+      const c = document.createElement('div');
+      c.classList.add('confetti');
+      c.style.left = Math.random() * window.innerWidth + 'px';
+      c.style.backgroundColor = `hsl(${Math.random()*360}, 100%, 60%)`;
+      document.body.appendChild(c);
+      fall(c);
+    }
+  }
+  function fall(el){
+    let top = -10;
+    const speed = 2 + Math.random()*3;
+    function drop(){
+      top += speed;
+      el.style.top = top + 'px';
+      if(top < window.innerHeight) requestAnimationFrame(drop);
+      else el.remove();
+    }
+    drop();
+  }
+
+  // Falling stars
+  function createStar() {
+    const star = document.createElement('div');
+    star.classList.add('star');
+    star.style.left = Math.random() * window.innerWidth + 'px';
+    star.style.top = '-5px';
+    document.body.appendChild(star);
+    let top = -5;
+    const speed = 1 + Math.random() * 2;
+    function fallStar() {
+      top += speed;
+      star.style.top = top + 'px';
+      if(top < window.innerHeight) requestAnimationFrame(fallStar);
+      else star.remove();
+    }
+    fallStar();
+  }
+
+  // Blooming flowers
+  function createFlower() {
+    const flower = document.createElement('div');
+    flower.classList.add('flower');
+    flower.style.left = Math.random() * window.innerWidth + 'px';
+    flower.style.backgroundColor = `hsl(${Math.random()*360}, 70%, 70%)`;
+    document.body.appendChild(flower);
+
+    let bottom = 0;
+    const riseSpeed = 0.3 + Math.random() * 0.3;
+    function rise() {
+      bottom += riseSpeed;
+      flower.style.bottom = bottom + 'px';
+      if(bottom < 60) requestAnimationFrame(rise);
+      else flower.remove();
+    }
+    rise();
+  }
+
+  // Floating magical particles behind card
+  function createParticle() {
+    const p = document.createElement('div');
+    p.classList.add('particle');
+    p.style.left = Math.random() * window.innerWidth + 'px';
+    p.style.top = Math.random() * window.innerHeight + 'px';
+    document.body.appendChild(p);
+    let opacity = 0;
+    const speed = 0.005 + Math.random() * 0.01;
+    function float() {
+      opacity += speed;
+      p.style.opacity = opacity;
+      p.style.top = (parseFloat(p.style.top) - 0.2) + 'px';
+      if(opacity < 0.6) requestAnimationFrame(float);
+      else p.remove();
+    }
+    float();
+  }
+
+  button.addEventListener('click', () => {
+    card.classList.add('show');
+    music.play();
+    button.style.display = 'none';
+    typeMessage(messageText, messageEl);
+    createConfetti(50);
+    setInterval(createStar, 150);
+    setInterval(createFlower, 400);
+    setInterval(createParticle, 200);
+  });
+</script>
+
+</body>
+</html>
