@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Happy New Year ✨</title>
+
+<style>
+html,body{
+  margin:0;
+  padding:0;
+  height:100%;
+  overflow:hidden;
+  font-family:Segoe UI,sans-serif;
+}
+
+/* SKY BACKGROUND */
+body{
+  background:linear-gradient(120deg,#0f2027,#203a43,#2c5364);
+  background-size:300% 300%;
+  animation:sky 20s ease infinite;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+}
+
+@keyframes sky{
+  0%{background-position:0% 50%}
+  50%{background-position:100% 50%}
+  100%{background-position:0% 50%}
+}
+
+/* TAP BUTTON */
+#tap{
+  padding:20px 45px;
+  font-size:20px;
+  border:none;
+  border-radius:18px;
+  color:#fff;
+  cursor:pointer;
+  background:linear-gradient(45deg,#ff416c,#ff4b2b);
+  box-shadow:0 0 25px rgba(255,75,75,.7);
+  animation:glow 2s infinite;
+  z-index:10;
+}
+
+@keyframes glow{
+  0%,100%{box-shadow:0 0 25px rgba(255,75,75,.6)}
+  50%{box-shadow:0 0 45px rgba(255,75,75,1)}
+}
+
+/* CARD */
+#card{
+  position:absolute;
+  max-width:360px;
+  padding:30px;
+  background:rgba(255,255,255,.95);
+  border-radius:20px;
+  box-shadow:0 30px 60px rgba(0,0,0,.4);
+  text-align:center;
+  transform:scale(0);
+  opacity:0;
+  transition:.6s ease;
+  z-index:9;
+}
+#card.show{transform:scale(1);opacity:1}
+
+h1{color:#ff416c;margin-top:0}
+p{color:#333;line-height:1.6}
+
+/* PARTICLES */
+.particle{
+  position:absolute;
+  width:4px;
+  height:4px;
+  background:rgba(255,255,255,.6);
+  border-radius:50%;
+  pointer-events:none;
+  z-index:1;
+}
+
+/* STARS */
+.star{
+  position:absolute;
+  width:2px;
+  height:2px;
+  background:#fff;
+  border-radius:50%;
+  opacity:.8;
+  z-index:1;
+}
+
+/* AIRCRAFT */
+.jet{
+  position:absolute;
+  width:0;
+  height:0;
+  border-left:10px solid transparent;
+  border-right:10px solid transparent;
+  border-bottom:18px solid #fff;
+  opacity:.9;
+  z-index:2;
+}
+
+/* FLOWERS */
+.flower{
+  position:absolute;
+  bottom:-10px;
+  width:8px;
+  height:8px;
+  background:pink;
+  border-radius:50%;
+  opacity:.8;
+  z-index:2;
+}
+</style>
+</head>
+
+<body>
+
+<button id="tap">Tap to Open 🎉</button>
+
+<div id="card">
+  <h1>Happy New Year 🎆</h1>
+  <p>Hoi 💮</p>
+  <p id="msg"></p>
+</div>
+
+<audio id="music" loop>
+  <source src="co2.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+const tap=document.getElementById("tap");
+const card=document.getElementById("card");
+const msg=document.getElementById("msg");
+const music=document.getElementById("music");
+
+const text=`Happy new year yasu
+I didn't wanted this year to be ended like this
+But man I am such a dumbass
+But I pray 2026 and the rest all years be the best ones for you and your family.
+May you always be happy everywhere 💝
+And achieve your dreams 🫡
+Barakallahu Feek ✨
+Buii`;
+
+function typeText(){
+  let i=0;
+  const t=setInterval(()=>{
+    if(i<text.length){
+      msg.innerHTML+=text[i]==="\n"?"<br>":text[i];
+      i++;
+    }else clearInterval(t);
+  },45);
+}
+
+/* PARTICLES */
+function particle(){
+  const p=document.createElement("div");
+  p.className="particle";
+  p.style.left=Math.random()*innerWidth+"px";
+  p.style.top=innerHeight+"px";
+  document.body.appendChild(p);
+  let y=innerHeight;
+  const r=setInterval(()=>{
+    y-=0.5;
+    p.style.top=y+"px";
+    p.style.opacity=y/innerHeight;
+    if(y<-10){clearInterval(r);p.remove();}
+  },10);
+}
+
+/* STARS */
+function star(){
+  const s=document.createElement("div");
+  s.className="star";
+  s.style.left=Math.random()*innerWidth+"px";
+  s.style.top="-5px";
+  document.body.appendChild(s);
+  let y=-5;
+  const f=setInterval(()=>{
+    y+=1;
+    s.style.top=y+"px";
+    if(y>innerHeight){clearInterval(f);s.remove();}
+  },16);
+}
+
+/* AIRCRAFT */
+function jet(){
+  const j=document.createElement("div");
+  j.className="jet";
+  j.style.top=Math.random()*innerHeight*0.5+"px";
+  j.style.left="-30px";
+  document.body.appendChild(j);
+  let x=-30;
+  const fly=setInterval(()=>{
+    x+=3;
+    j.style.left=x+"px";
+    if(x>innerWidth+30){clearInterval(fly);j.remove();}
+  },16);
+}
+
+/* FLOWERS */
+function flower(){
+  const f=document.createElement("div");
+  f.className="flower";
+  f.style.left=Math.random()*innerWidth+"px";
+  f.style.background=`hsl(${Math.random()*360},70%,70%)`;
+  document.body.appendChild(f);
+  let y=-10;
+  const rise=setInterval(()=>{
+    y+=0.4;
+    f.style.bottom=y+"px";
+    if(y>60){clearInterval(rise);f.remove();}
+  },16);
+}
+
+tap.onclick=()=>{
+  tap.style.display="none";
+  card.classList.add("show");
+  music.play();
+  typeText();
+  setInterval(particle,200);
+  setInterval(star,150);
+  setInterval(jet,3000);
+  setInterval(flower,400);
+};
+</script>
+
+</body>
+</html>
