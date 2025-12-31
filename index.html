@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Happy New Year 🎆</title>
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+      background-size: 400% 400%;
+      animation: gradientShift 15s ease infinite;
+      font-family: Arial, sans-serif;
+      text-align: center;
+      overflow: hidden;
+      position: relative;
+    }
+
+    @keyframes gradientShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    #tapButton {
+      padding: 15px 30px;
+      font-size: 18px;
+      border: none;
+      border-radius: 10px;
+      background-color: #ff4d6d;
+      color: white;
+      cursor: pointer;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+      transition: all 0.3s ease;
+      z-index: 3;
+    }
+    #tapButton:active { transform: scale(0.95); }
+
+    #card {
+      background: white;
+      padding: 30px;
+      border-radius: 20px;
+      max-width: 320px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+      transform: scale(0);
+      opacity: 0;
+      transition: all 0.6s ease;
+      position: relative;
+      z-index: 2;
+    }
+    #card.show {
+      transform: scale(1);
+      opacity: 1;
+    }
+
+    h1 { color: #ff4d6d; }
+    p { color: #444; line-height: 1.6; }
+
+    .stickers {
+      margin-top: 20px;
+    }
+    .sticker {
+      width: 60px;
+      margin: 5px;
+      animation: float 3s ease-in-out infinite;
+      opacity: 0;
+    }
+
+    @keyframes float {
+      0% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+      100% { transform: translateY(0); }
+    }
+
+    .confetti {
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      background-color: #fff;
+      top: -10px;
+      opacity: 0.8;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .plane {
+      position: absolute;
+      transform: rotate(20deg);
+      opacity: 0.9;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .sparkle {
+      position: absolute;
+      width: 4px;
+      height: 4px;
+      background-color: white;
+      border-radius: 50%;
+      opacity: 0.8;
+      pointer-events: none;
+      z-index: 1;
+    }
+  </style>
+</head>
+<body>
+
+<button id="tapButton">Tap to Open 💖</button>
+
+<div id="card">
+  <h1>Happy New Year 🎆</h1>
+  <p>Hoi 💮</p>
+  <p>Happy new year Yasu</p>
+  <p id="message"></p>
+
+  <div class="stickers">
+    <img src="sticker1png.jpg" class="sticker">
+    <img src="sticker2png.jpg" class="sticker">
+    <img src="sticker3png.jpg" class="sticker">
+  </div>
+</div>
+
+<audio id="music" loop>
+  <source src="co2.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+  const button = document.getElementById('tapButton');
+  const card = document.getElementById('card');
+  const music = document.getElementById('music');
+  const stickers = document.querySelectorAll('.sticker');
+  const messageEl = document.getElementById('message');
+
+  const messageText = `I didn't wanted this year to be ended like this
+But man I am such a dumbass
+But I pray 2026 and the rest all years be the best ones for you and your family.
+May you always be happy everywhere 💝
+And achieve your dreams 🫡
+Barakallahu Feek ✨
+Buii`;
+
+  function typeMessage(text, el, delay=50) {
+    let i = 0;
+    function type() {
+      if (i < text.length) {
+        el.innerHTML += text[i] === '\n' ? '<br>' : text[i];
+        i++;
+        setTimeout(type, delay);
+      }
+    }
+    type();
+  }
+
+  function animateStickers() {
+    stickers.forEach((sticker, index) => {
+      setTimeout(() => { sticker.style.opacity = 1; }, index * 300);
+    });
+  }
+
+  function createConfetti(count=30) {
+    for (let i=0;i<count;i++) {
+      const c = document.createElement('div');
+      c.classList.add('confetti');
+      c.style.left = Math.random() * window.innerWidth + 'px';
+      c.style.backgroundColor = `hsl(${Math.random()*360}, 100%, 60%)`;
+      document.body.appendChild(c);
+      fall(c);
+    }
+  }
+
+  function fall(el) {
+    let top = -10;
+    const speed = 2 + Math.random() * 3;
+    function drop() {
+      top += speed;
+      el.style.top = top + 'px';
+      if (top < window.innerHeight) requestAnimationFrame(drop);
+      else el.remove();
+    }
+    drop();
+  }
+
+  // Flying planes
+  const planeImages = ['sticker1png.jpg','sticker2png.jpg','sticker3png.jpg'];
+  function createPlane() {
+    const plane = document.createElement('img');
+    plane.src = planeImages[Math.floor(Math.random() * planeImages.length)];
+    plane.classList.add('plane');
+    plane.style.top = Math.random() * window.innerHeight + 'px';
+    plane.style.left = '-50px';
+    plane.style.width = (30 + Math.random()*20) + 'px';
+    document.body.appendChild(plane);
+    const duration = 5 + Math.random()*5;
+    plane.style.transition = `transform ${duration}s linear, opacity ${duration}s linear`;
+    setTimeout(() => {
+      plane.style.transform = `translateX(${window.innerWidth + 50}px) translateY(${Math.random()*-100}px) rotate(40deg)`;
+      plane.style.opacity = 0;
+    }, 50);
+    setTimeout(() => plane.remove(), duration*1000 + 200);
+  }
+
+  function createSparkle() {
+    const s = document.createElement('div');
+    s.classList.add('sparkle');
+    s.style.left = Math.random() * window.innerWidth + 'px';
+    s.style.top = Math.random() * window.innerHeight + 'px';
+    document.body.appendChild(s);
+    setTimeout(() => s.remove(), 2000);
+  }
+
+  button.addEventListener('click', () => {
+    card.classList.add('show');
+    music.play();
+    button.style.display = 'none';
+    typeMessage(messageText, messageEl);
+    animateStickers();
+    createConfetti(50);
+    setInterval(createPlane, 1000);
+    setInterval(createSparkle, 200);
+  });
+</script>
+
+</body>
+</html>
