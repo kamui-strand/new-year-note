@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Happy New Year 🎆</title>
+  <meta charset="UTF-8">
+  <style>
+    body {
+      background: linear-gradient(135deg, #ffdee9, #b5fffc);
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      text-align: center;
+      margin: 0;
+    }
+
+    /* Pop-up animation for the card */
+    .card {
+      background: white;
+      padding: 30px;
+      border-radius: 20px;
+      max-width: 400px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+      transform: scale(0);
+      opacity: 0;
+      animation: popUp 0.6s forwards;
+    }
+
+    @keyframes popUp {
+      0% {
+        transform: scale(0);
+        opacity: 0;
+      }
+      60% {
+        transform: scale(1.1);
+        opacity: 1;
+      }
+      100% {
+        transform: scale(1);
+      }
+    }
+
+    h1 { color: #ff4d6d; }
+    p { color: #444; line-height: 1.5; }
+    img { width: 60px; margin: 10px; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>Happy New Year 🎆</h1>
+    <p>Hoi 💮</p>
+    <p>Happy new year Yasu</p>
+    <p>
+      I didn't wanted this year to be ended like this<br>
+      But man I am such a dumbass<br>
+      But I pray 2026 and the rest all years be the best ones for you and your family. May you be always be happy everywhere 💝<br>
+      And achieve your dreams 🫡<br>
+      Barakallahu Feek ✨<br>
+      Buii
+    </p>
+
+    <!-- Stickers -->
+    <img src="sticker1.png" alt="Cute sticker">
+    <img src="sticker2.png" alt="Cute sticker">
+  </div>
+
+  <!-- Background music -->
+  <audio autoplay loop>
+    <source src="CO2.mp3" type="audio/mpeg">
+  </audio>
+</body>
+</html>
