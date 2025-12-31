@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Happy New Year 🌙🎇</title>
+
+<style>
+html,body{
+  margin:0;
+  padding:0;
+  height:100%;
+  overflow:hidden;
+  font-family:Segoe UI,sans-serif;
+}
+
+/* PINK DREAM BACKGROUND */
+body{
+  background:linear-gradient(120deg,#ff9a9e,#fad0c4,#fbc2eb);
+  background-size:300% 300%;
+  animation:bgMove 18s ease infinite;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+}
+
+@keyframes bgMove{
+  0%{background-position:0% 50%}
+  50%{background-position:100% 50%}
+  100%{background-position:0% 50%}
+}
+
+/* TAP BUTTON */
+#tap{
+  padding:20px 45px;
+  font-size:20px;
+  border:none;
+  border-radius:20px;
+  cursor:pointer;
+  color:#fff;
+  background:linear-gradient(45deg,#ff5f9e,#ff7eb3);
+  box-shadow:0 0 30px rgba(255,95,158,.8);
+  animation:glow 2s infinite;
+  z-index:10;
+}
+
+@keyframes glow{
+  0%,100%{box-shadow:0 0 30px rgba(255,95,158,.7)}
+  50%{box-shadow:0 0 55px rgba(255,95,158,1)}
+}
+
+/* CARD */
+#card{
+  position:absolute;
+  max-width:360px;
+  padding:30px;
+  background:rgba(255,255,255,.96);
+  border-radius:22px;
+  box-shadow:0 30px 70px rgba(0,0,0,.35);
+  text-align:center;
+  transform:scale(0);
+  opacity:0;
+  transition:.6s ease;
+  z-index:9;
+}
+#card.show{transform:scale(1);opacity:1}
+
+h1{color:#ff5f9e;margin-top:0}
+p{color:#333;line-height:1.6}
+
+/* FLOATING MOON */
+#moon{
+  position:absolute;
+  top:80px;
+  right:80px;
+  width:120px;
+  height:120px;
+  background:radial-gradient(circle at 30% 30%,#fff,#ffe6f0);
+  border-radius:50%;
+  box-shadow:0 0 40px rgba(255,255,255,.8);
+  animation:floatMoon 6s ease-in-out infinite;
+  z-index:2;
+}
+
+@keyframes floatMoon{
+  0%,100%{transform:translateY(0)}
+  50%{transform:translateY(-20px)}
+}
+
+/* PARTICLES */
+.particle{
+  position:absolute;
+  width:4px;
+  height:4px;
+  background:rgba(255,255,255,.6);
+  border-radius:50%;
+  pointer-events:none;
+  z-index:1;
+}
+
+/* FIREWORKS */
+.firework{
+  position:absolute;
+  width:6px;
+  height:6px;
+  border-radius:50%;
+  background:transparent;
+  pointer-events:none;
+  z-index:3;
+}
+</style>
+</head>
+
+<body>
+
+<div id="moon"></div>
+
+<button id="tap">Tap to Open 🎉</button>
+
+<div id="card">
+  <h1>Happy New Year 🎆</h1>
+  <p>Hoi 💮</p>
+  <p id="msg"></p>
+</div>
+
+<audio id="music" loop>
+  <source src="co2.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+const tap=document.getElementById("tap");
+const card=document.getElementById("card");
+const msg=document.getElementById("msg");
+const music=document.getElementById("music");
+
+const text=`Happy new year yasu
+I didn't wanted this year to be ended like this
+But man I am such a dumbass
+But I pray 2026 and the rest all years be the best ones for you and your family.
+May you always be happy everywhere 💝
+And achieve your dreams 🫡
+Barakallahu Feek ✨
+Buii`;
+
+/* TYPE EFFECT */
+function typeText(){
+  let i=0;
+  const t=setInterval(()=>{
+    if(i<text.length){
+      msg.innerHTML+=text[i]==="\n"?"<br>":text[i];
+      i++;
+    }else clearInterval(t);
+  },45);
+}
+
+/* FLOATING PARTICLES */
+function particle(){
+  const p=document.createElement("div");
+  p.className="particle";
+  p.style.left=Math.random()*innerWidth+"px";
+  p.style.top=innerHeight+"px";
+  document.body.appendChild(p);
+  let y=innerHeight;
+  const rise=setInterval(()=>{
+    y-=0.6;
+    p.style.top=y+"px";
+    p.style.opacity=y/innerHeight;
+    if(y<-10){clearInterval(rise);p.remove();}
+  },12);
+}
+
+/* FIREWORK POP */
+function firework(){
+  const fw=document.createElement("div");
+  fw.className="firework";
+  fw.style.left=Math.random()*innerWidth+"px";
+  fw.style.top=Math.random()*innerHeight*0.5+"px";
+  document.body.appendChild(fw);
+
+  for(let i=0;i<12;i++){
+    const spark=document.createElement("div");
+    spark.style.position="absolute";
+    spark.style.width="4px";
+    spark.style.height="4px";
+    spark.style.borderRadius="50%";
+    spark.style.background=`hsl(${Math.random()*360},100%,70%)`;
+    spark.style.left="0";
+    spark.style.top="0";
+    fw.appendChild(spark);
+
+    const angle=Math.random()*2*Math.PI;
+    let dist=0;
+    const boom=setInterval(()=>{
+      dist+=2;
+      spark.style.transform=`translate(${Math.cos(angle)*dist}px,${Math.sin(angle)*dist}px)`;
+      spark.style.opacity=1-dist/40;
+      if(dist>40){
+        clearInterval(boom);
+        spark.remove();
+      }
+    },16);
+  }
+  setTimeout(()=>fw.remove(),800);
+}
+
+tap.onclick=()=>{
+  tap.style.display="none";
+  card.classList.add("show");
+  music.play();
+  typeText();
+  setInterval(particle,200);
+  setInterval(firework,1800);
+};
+</script>
+
+</body>
+</html>
